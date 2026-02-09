@@ -78,74 +78,64 @@
         </div>
     </div>
 
-   <script>
+    <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
-        const icon = document.getElementById('icon');
+        const displayImg = document.getElementById('displayImg');
         const actions = document.getElementById('actions');
 
         let yesSize = 18;
-        let noSize = 18; // Počáteční velikost pro "Ne"
         let step = 0;
 
+        // Tady si nastavíš cesty ke svým fotkám
         const steps = [
-            { q: "Opravdu? 🥺", i: "❓" },
-            { q: "Vážně? 🤨", i: "🤔" },
-            { q: "Jsi si úplně jistá? 🧐", i: "🧐" },
-            { q: "Slibuješ? 💖", i: "✨" }
+            { q: "Opravdu? 🥺", img: "natalie1.png" },
+            { q: "Vážně? 🤨", img: "natalie2.png" },
+            { q: "Jsi si úplně jistá? 🧐", img: "natalie3.png" }, // Můžeš je střídat
+            { q: "Slibuješ? 💖", img: "natalie5.png" }
         ];
 
         function moveNoButton() {
-            // Útěk tlačítka
             noBtn.style.position = "fixed";
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Logika velikostí (pouze v prvním kroku před otázkami)
             if (step === 0) {
-                // Ano roste
-                yesSize += 15;
+                yesSize += 10;
                 yesBtn.style.fontSize = yesSize + "px";
                 yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
-
-                // Ne se zmenšuje (nesmí klesnout pod 2px, aby nezmizelo úplně hned)
-                if (noSize > 4) {
-                    noSize -= 2;
-                    noBtn.style.fontSize = noSize + "px";
-                    noBtn.style.padding = (noSize / 2) + "px " + (noSize) + "px";
-                }
             }
         }
 
         noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('click', () => {
-            alert("Tudy cesta nevede! 😜");
-            moveNoButton();
-        });
+        noBtn.addEventListener('click', moveNoButton);
 
         yesBtn.addEventListener('click', () => {
             if (step < steps.length) {
                 question.innerHTML = steps[step].q;
-                icon.innerHTML = steps[step].i;
+                displayImg.src = steps[step].img;
                 
-                // Při otázkách vrátíme tlačítka do rozumné velikosti
+                // Reset velikosti tlačítka pro čitelnost
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
-                noBtn.style.fontSize = "18px";
-                noBtn.style.padding = "15px 30px";
-                
                 step++;
             } else {
                 // FINÁLE
-                icon.innerHTML = "🍔❤️🐶";
+                displayImg.src = "natalieB.png"; // Nebo nějaká společná fotka
                 question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
                 noBtn.style.display = "none";
                 actions.innerHTML = `
-                    <a href="https://
+                    <a href="https://www.blackdogs.cz/praha" target="_blank" class="restaurant-link">
+                        Jdeme do Black Dogs! 🍔❤️
+                    </a>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
