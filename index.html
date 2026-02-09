@@ -22,13 +22,19 @@
             padding: 50px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 400px;
+            width: 450px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             z-index: 1;
         }
 
         h1 {
             color: #d63384;
             margin-bottom: 30px;
+            line-height: 1.4;
         }
 
         .buttons-wrapper {
@@ -36,7 +42,7 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            min-height: 150px; /* Prostor pro zvětšování */
+            width: 100%;
         }
 
         button {
@@ -58,22 +64,21 @@
             background-color: #f8f9fa;
             color: #d63384;
             border: 2px solid #ff3399;
-            /* Na začátku nemá absolutní pozici */
         }
 
         .heart-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
+            font-size: 60px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="heart-icon">💖</div>
+        <div id="icon" class="heart-icon">💖</div>
         <h1 id="question">Budeš moje Valentýnka?</h1>
         
-        <div class="buttons-wrapper">
+        <div id="actions" class="buttons-wrapper">
             <button id="yesBtn">Ano</button>
             <button id="noBtn">Ne</button>
         </div>
@@ -83,33 +88,63 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
+        const icon = document.getElementById('icon');
 
         let yesSize = 18;
+        let questionIndex = 0;
 
+        // Seznam otázek, které se budou střídat
+        const questions = [
+            "Opravdu? 🥺",
+            "Vážně to chceš? 🙄",
+            "Jsi si úplně jistá? 🧐",
+            "Slibuješ? 💖",
+            "Nerozmyslíš si to ještě? 😇",
+            "Tak jo... miluju tě! ❤️"
+        ];
+
+        // Funkce pro útěk tlačítka "Ne"
         function moveNoButton() {
-            // Při prvním pohybu změníme pozici na fixní, aby mohl létat kdekoli
             noBtn.style.position = "fixed";
-            
-            // Výpočet pozice tak, aby tlačítko nezmizelo mimo obrazovku
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Zvětšení "Ano"
-            yesSize += 15;
+            // Zvětšování tlačítka Ano při každém pokusu o Ne
+            yesSize += 10;
             yesBtn.style.fontSize = yesSize + "px";
-            yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
         }
 
-        noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('click', moveNoButton);
+        // Když se jí PŘECE JEN povede kliknout na Ne
+        noBtn.addEventListener('click', () => {
+            alert("To bolelo... zkus to radši znovu a klikni na to správné tlačítko! 😢");
+            moveNoButton();
+        });
 
+        noBtn.addEventListener('mouseover', moveNoButton);
+
+        // Logika pro tlačítko "Ano"
         yesBtn.addEventListener('click', () => {
-            question.innerHTML = "Jupííí! ❤️ Miluju tě!";
-            noBtn.style.display = "none";
-            document.querySelector('.heart-icon').innerHTML = "🥰✨❤️";
+            if (questionIndex < questions.length - 1) {
+                // Změna textu na další otázku
+                question.innerHTML = questions[questionIndex];
+                questionIndex++;
+                
+                // Resetujeme velikost tlačítka, aby se tam zase vešlo
+                yesSize = 20;
+                yesBtn.style.fontSize = "20px";
+                yesBtn.style.padding = "15px 30px";
+                
+                // Změníme i ikonku pro zábavu
+                const icons = ["❓", "🤨", "🤡", "🌸", "✨"];
+                icon.innerHTML = icons[questionIndex] || "❤️";
+            } else {
+                // Finální obrazovka
+                question.innerHTML = "Jupííí! ❤️ Bude to nejlepší Valentýn!";
+                icon.innerHTML = "🥰✨🥳";
+                document.getElementById('actions').style.display = "none";
+            }
         });
     </script>
 
