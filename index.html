@@ -12,86 +12,64 @@
             height: 100vh;
             margin: 0;
             background-color: #ffe6f2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
         }
-
         .container {
             text-align: center;
             background: white;
-            padding: 50px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 90%;
             max-width: 450px;
-            min-height: 350px;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1;
         }
-
-        h1 {
-            color: #d63384;
-            margin-bottom: 30px;
-            line-height: 1.4;
-            font-size: 26px;
-        }
-
-        .buttons-wrapper {
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 5px solid #ff3399;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            background-color: #fff0f5;
+        }
+        .photo-frame img {
             width: 100%;
-            min-height: 120px;
+            height: 100%;
+            object-fit: cover;
         }
-
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.1s ease;
-        }
-
-        #yesBtn {
-            background-color: #ff3399;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 51, 153, 0.3);
-        }
-
-        #noBtn {
-            background-color: #f8f9fa;
-            color: #d63384;
-            border: 2px solid #ff3399;
-        }
-
-        .heart-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
+        h1 { color: #d63384; margin-bottom: 25px; font-size: 22px; min-height: 50px; }
+        .buttons-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 100px; width: 100%; }
+        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        #yesBtn { background-color: #ff3399; color: white; }
+        #noBtn { background-color: #f8f9fa; color: #d63384; border: 2px solid #ff3399; }
         .restaurant-link {
             display: inline-block;
             margin-top: 20px;
-            padding: 15px 30px;
+            padding: 15px 25px;
             background-color: #333;
             color: white;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 18px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div id="icon" class="heart-icon">💖</div>
+        <div class="photo-frame">
+            <img id="displayImg" src="valentyn_start.jpg" alt="Valentýnka">
+        </div>
+        
         <h1 id="question">Budeš moje Valentýnka?</h1>
         
         <div id="actions" class="buttons-wrapper">
@@ -104,17 +82,18 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
-        const icon = document.getElementById('icon');
+        const displayImg = document.getElementById('displayImg');
         const actions = document.getElementById('actions');
 
         let yesSize = 18;
         let step = 0;
 
+        // Tady si nastavíš cesty ke svým fotkám
         const steps = [
-            { q: "Opravdu? 🥺", i: "❓" },
-            { q: "Vážně? 🤨", i: "🤔" },
-            { q: "Jsi si úplně jistá? 🧐", i: "🧐" },
-            { q: "Slibuješ? 💖", i: "✨" }
+            { q: "Opravdu? 🥺", img: "natalie1.png" },
+            { q: "Vážně? 🤨", img: "natalie2.png" },
+            { q: "Jsi si úplně jistá? 🧐", img: "natalie3.png" }, // Můžeš je střídat
+            { q: "Slibuješ? 💖", img: "fotka2.jpg" }
         ];
 
         function moveNoButton() {
@@ -124,44 +103,39 @@
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Zvětšujeme tlačítko jen při nahánění (krok 0)
             if (step === 0) {
-                yesSize += 12;
+                yesSize += 10;
                 yesBtn.style.fontSize = yesSize + "px";
                 yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
             }
         }
 
         noBtn.addEventListener('mouseover', moveNoButton);
-        noBtn.addEventListener('click', () => {
-            alert("Tudy cesta nevede! 😜");
-            moveNoButton();
-        });
+        noBtn.addEventListener('click', moveNoButton);
 
         yesBtn.addEventListener('click', () => {
             if (step < steps.length) {
                 question.innerHTML = steps[step].q;
-                icon.innerHTML = steps[step].i;
+                displayImg.src = steps[step].img;
                 
-                // Resetujeme velikost pro čistý vzhled otázek
+                // Reset velikosti tlačítka pro čitelnost
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
                 step++;
             } else {
-                // FINÁLNÍ OBRAZOVKA
-                icon.innerHTML = "🍔❤️🐶";
+                // FINÁLE
+                displayImg.src = "fotka1.jpg"; // Nebo nějaká společná fotka
                 question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
                 noBtn.style.display = "none";
                 actions.innerHTML = `
                     <a href="https://www.blackdogs.cz/praha" target="_blank" class="restaurant-link">
-                        Jdeme do Black Dogs! 🍽️
+                        Jdeme do Black Dogs! 🍔❤️
                     </a>
                 `;
             }
         });
     </script>
-
 </body>
 </html>
