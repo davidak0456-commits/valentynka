@@ -11,8 +11,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffe6f2; /* Světle růžové pozadí */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe6f2;
+            font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
         }
 
@@ -22,8 +22,8 @@
             padding: 50px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
             width: 400px;
+            z-index: 1;
         }
 
         h1 {
@@ -31,12 +31,12 @@
             margin-bottom: 30px;
         }
 
-        .buttons {
+        .buttons-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
-            height: 100px; /* Prostor pro zvětšující se tlačítko */
+            min-height: 150px; /* Prostor pro zvětšování */
         }
 
         button {
@@ -45,21 +45,20 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.1s ease;
         }
 
         #yesBtn {
             background-color: #ff3399;
             color: white;
             font-weight: bold;
-            z-index: 10;
         }
 
         #noBtn {
             background-color: #f8f9fa;
             color: #d63384;
             border: 2px solid #ff3399;
-            position: absolute; /* Nutné pro posouvání */
+            /* Na začátku nemá absolutní pozici */
         }
 
         .heart-icon {
@@ -74,7 +73,7 @@
         <div class="heart-icon">💖</div>
         <h1 id="question">Budeš moje Valentýnka?</h1>
         
-        <div class="buttons">
+        <div class="buttons-wrapper">
             <button id="yesBtn">Ano</button>
             <button id="noBtn">Ne</button>
         </div>
@@ -85,33 +84,31 @@
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
 
-        let yesSize = 18; // Počáteční velikost písma
+        let yesSize = 18;
 
-        // Funkce pro útěk tlačítka "Ne"
         function moveNoButton() {
-            // Náhodné souřadnice v rámci okna prohlížeče
+            // Při prvním pohybu změníme pozici na fixní, aby mohl létat kdekoli
+            noBtn.style.position = "fixed";
+            
+            // Výpočet pozice tak, aby tlačítko nezmizelo mimo obrazovku
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
-            noBtn.style.position = "fixed"; // Přepne na fixní pozici pro pohyb po celé obrazovce
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Zvětšení tlačítka "Ano"
-            yesSize += 10;
+            // Zvětšení "Ano"
+            yesSize += 15;
             yesBtn.style.fontSize = yesSize + "px";
-            yesBtn.style.padding = (yesSize / 1.2) + "px " + (yesSize * 1.5) + "px";
+            yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
         }
 
-        // Reakce na přejetí myší i na kliknutí
         noBtn.addEventListener('mouseover', moveNoButton);
         noBtn.addEventListener('click', moveNoButton);
 
-        // Co se stane po kliknutí na "Ano"
         yesBtn.addEventListener('click', () => {
             question.innerHTML = "Jupííí! ❤️ Miluju tě!";
-            noBtn.style.display = "none"; // Schová tlačítko Ne
-            yesBtn.style.display = "none";
+            noBtn.style.display = "none";
             document.querySelector('.heart-icon').innerHTML = "🥰✨❤️";
         });
     </script>
