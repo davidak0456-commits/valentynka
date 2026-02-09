@@ -48,7 +48,7 @@
         }
         h1 { color: #d63384; margin-bottom: 25px; font-size: 22px; min-height: 50px; }
         .buttons-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 100px; width: 100%; }
-        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.1s; }
         #yesBtn { background-color: #ff3399; color: white; }
         #noBtn { background-color: #f8f9fa; color: #d63384; border: 2px solid #ff3399; }
         .restaurant-link {
@@ -86,27 +86,38 @@
         const actions = document.getElementById('actions');
 
         let yesSize = 18;
+        let noSize = 18; // Nová proměnná pro velikost tlačítka NE
         let step = 0;
 
-        // Tady si nastavíš cesty ke svým fotkám
         const steps = [
             { q: "Opravdu? 🥺", img: "natalie1.png" },
             { q: "Vážně? 🤨", img: "natalie2.png" },
-            { q: "Jsi si úplně jistá? 🧐", img: "natalie3.png" }, // Můžeš je střídat
+            { q: "Jsi si úplně jistá? 🧐", img: "natalie3.png" },
             { q: "Slibuješ? 💖", img: "natalie5.png" }
         ];
 
         function moveNoButton() {
+            // 1. Náhodný pohyb
             noBtn.style.position = "fixed";
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
+            // 2. Změna velikostí (jen v prvním kroku)
             if (step === 0) {
+                // Zvětšování ANO
                 yesSize += 10;
                 yesBtn.style.fontSize = yesSize + "px";
                 yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
+
+                // Zmenšování NE (zastaví se na 5px, aby nezmizelo úplně)
+                if (noSize > 5) {
+                    noSize -= 2; 
+                    noBtn.style.fontSize = noSize + "px";
+                    // Upravíme i padding (výplň), aby se zmenšilo celé tlačítko
+                    noBtn.style.padding = (noSize / 1.5) + "px " + (noSize * 1.2) + "px";
+                }
             }
         }
 
@@ -118,15 +129,19 @@
                 question.innerHTML = steps[step].q;
                 displayImg.src = steps[step].img;
                 
-                // Reset velikosti tlačítka pro čitelnost
+                // RESET velikosti obou tlačítek pro další otázky
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
+                noSize = 18; // Reset velikosti NE
+                noBtn.style.fontSize = "18px";
+                noBtn.style.padding = "15px 30px";
+                
                 step++;
             } else {
                 // FINÁLE
-                displayImg.src = "natalieB.png"; // Nebo nějaká společná fotka
+                displayImg.src = "natalieB.png"; 
                 question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
                 noBtn.style.display = "none";
                 actions.innerHTML = `
