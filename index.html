@@ -12,10 +12,9 @@
             height: 100vh;
             margin: 0;
             background-color: #ffe6f2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             overflow: hidden;
         }
-
         .container {
             text-align: center;
             background: white;
@@ -23,72 +22,28 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 90%;
-            max-width: 500px;
-            min-height: 350px;
+            max-width: 450px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
             z-index: 1;
         }
-
-        h1 {
-            color: #d63384;
-            margin-bottom: 25px;
-            line-height: 1.4;
-            font-size: 28px;
-        }
-
-        .buttons-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            min-height: 100px;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: bold;
-        }
-
-        #yesBtn {
-            background-color: #ff3399;
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 51, 153, 0.3);
-        }
-
-        #noBtn {
-            background-color: #f8f9fa;
-            color: #d63384;
-            border: 2px solid #ff3399;
-        }
-
-        .heart-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
+        h1 { color: #d63384; margin-bottom: 25px; font-size: 24px; }
+        .buttons-wrapper { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 100px; }
+        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        #yesBtn { background-color: #ff3399; color: white; }
+        #noBtn { background-color: #f8f9fa; color: #d63384; border: 2px solid #ff3399; }
+        .heart-icon { font-size: 60px; margin-bottom: 15px; }
         .restaurant-link {
             display: inline-block;
             margin-top: 20px;
-            padding: 12px 25px;
+            padding: 15px 25px;
             background-color: #333;
             color: white;
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .restaurant-link:hover {
-            background-color: #000;
         }
     </style>
 </head>
@@ -97,14 +52,13 @@
     <div class="container">
         <div id="icon" class="heart-icon">💖</div>
         <h1 id="question">Budeš moje Valentýnka?</h1>
-        
         <div id="actions" class="buttons-wrapper">
             <button id="yesBtn">Ano</button>
             <button id="noBtn">Ne</button>
         </div>
     </div>
 
-<script>
+    <script>
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
@@ -112,17 +66,14 @@
         const actions = document.getElementById('actions');
 
         let yesSize = 18;
-        let questionIndex = 0;
+        let step = 0;
 
-        // Tvoje postupně se měnící otázky
-        const questions = [
-            "Opravdu? 🥺",
-            "Vážně? 🤨",
-            "Jsi si úplně jistá? 🧐",
-            "Slibuješ? 💖"
+        const steps = [
+            { q: "Opravdu? 🥺", i: "❓" },
+            { q: "Vážně? 🤨", i: "🤔" },
+            { q: "Jsi si úplně jistá? 🧐", i: "🧐" },
+            { q: "Slibuješ? 💖", i: "✨" }
         ];
-
-        const icons = ["❓", "🤔", "🧐", "✨"];
 
         function moveNoButton() {
             noBtn.style.position = "fixed";
@@ -131,44 +82,41 @@
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            yesSize += 12;
+            yesSize += 10;
             yesBtn.style.fontSize = yesSize + "px";
             yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
         }
 
         noBtn.addEventListener('mouseover', moveNoButton);
         noBtn.addEventListener('click', () => {
-            alert("Takhle se k sobě nehodíme! Zkus to tlačítko vedle... 😜");
+            alert("Tudy cesta nevede! 😜");
             moveNoButton();
         });
 
         yesBtn.addEventListener('click', () => {
-            if (questionIndex < questions.length) {
-                // Tady se mění texty otázek
-                question.innerHTML = questions[questionIndex];
-                icon.innerHTML = icons[questionIndex];
+            if (step < steps.length) {
+                // Nastavíme další otázku ze seznamu
+                question.innerHTML = steps[step].q;
+                icon.innerHTML = steps[step].i;
                 
-                // Reset velikosti pro lepší čitelnost
+                // Resetujeme velikost tlačítka, aby nezabralo celou obrazovku hned
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
-                questionIndex++;
+                step++;
             } else {
-                // FINÁLNÍ OBRAZOVKA - tohle se spustí po poslední otázce
+                // FINÁLE
                 icon.innerHTML = "🍔❤️🐶";
                 question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
-                
-                // Schováme utíkající tlačítko Ne a nahradíme Ano odkazem
                 noBtn.style.display = "none";
                 actions.innerHTML = `
                     <a href="https://www.blackdogs.cz/praha" target="_blank" class="restaurant-link">
-                        Zobrazit Black Dogs 🍽️
+                        Jdeme do Black Dogs! 🍽️
                     </a>
                 `;
             }
         });
     </script>
-
 </body>
 </html>
