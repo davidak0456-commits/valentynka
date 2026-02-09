@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budeš můj Valentýn?</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffe6f2; /* Světle růžové pozadí */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            width: 400px;
+        }
+
+        h1 {
+            color: #d63384;
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            height: 100px; /* Prostor pro zvětšující se tlačítko */
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        #yesBtn {
+            background-color: #ff3399;
+            color: white;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        #noBtn {
+            background-color: #f8f9fa;
+            color: #d63384;
+            border: 2px solid #ff3399;
+            position: absolute; /* Nutné pro posouvání */
+        }
+
+        .heart-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="heart-icon">💖</div>
+        <h1 id="question">Budeš moje Valentýnka?</h1>
+        
+        <div class="buttons">
+            <button id="yesBtn">Ano</button>
+            <button id="noBtn">Ne</button>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const question = document.getElementById('question');
+
+        let yesSize = 18; // Počáteční velikost písma
+
+        // Funkce pro útěk tlačítka "Ne"
+        function moveNoButton() {
+            // Náhodné souřadnice v rámci okna prohlížeče
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = "fixed"; // Přepne na fixní pozici pro pohyb po celé obrazovce
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+
+            // Zvětšení tlačítka "Ano"
+            yesSize += 10;
+            yesBtn.style.fontSize = yesSize + "px";
+            yesBtn.style.padding = (yesSize / 1.2) + "px " + (yesSize * 1.5) + "px";
+        }
+
+        // Reakce na přejetí myší i na kliknutí
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('click', moveNoButton);
+
+        // Co se stane po kliknutí na "Ano"
+        yesBtn.addEventListener('click', () => {
+            question.innerHTML = "Jupííí! ❤️ Miluju tě!";
+            noBtn.style.display = "none"; // Schová tlačítko Ne
+            yesBtn.style.display = "none";
+            document.querySelector('.heart-icon').innerHTML = "🥰✨❤️";
+        });
+    </script>
+
+</body>
+</html>
