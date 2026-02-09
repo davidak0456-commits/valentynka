@@ -12,75 +12,88 @@
             height: 100vh;
             margin: 0;
             background-color: #ffe6f2;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
+
         .container {
             text-align: center;
             background: white;
-            padding: 30px;
+            padding: 50px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 90%;
             max-width: 450px;
-            min-height: 450px;
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1;
         }
-        h1 { color: #d63384; margin: 20px 0; font-size: 22px; min-height: 60px; }
-        
-        .gif-container {
-            width: 200px;
-            height: 200px;
+
+        h1 {
+            color: #d63384;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            font-size: 26px;
+        }
+
+        .buttons-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        .gif-container img {
-            max-width: 100%;
-            border-radius: 10px;
+            gap: 20px;
+            width: 100%;
+            min-height: 120px;
         }
 
-        .buttons-wrapper { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 20px; 
-            min-height: 120px;
-            width: 100%;
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.1s ease;
         }
-        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-        #yesBtn { background-color: #ff3399; color: white; border: none; }
-        #noBtn { background-color: #f8f9fa; color: #d63384; border: 2px solid #ff3399; }
-        
+
+        #yesBtn {
+            background-color: #ff3399;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 51, 153, 0.3);
+        }
+
+        #noBtn {
+            background-color: #f8f9fa;
+            color: #d63384;
+            border: 2px solid #ff3399;
+        }
+
+        .heart-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
         .restaurant-link {
             display: inline-block;
-            margin-top: 10px;
-            padding: 15px 25px;
+            margin-top: 20px;
+            padding: 15px 30px;
             background-color: #333;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="gif-container">
-            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3dmVyeHhlanZidmN4amRreG93YmxicGZ4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/c7scY4yv8m2lO/giphy.gif" alt="Roztomilý gif">
-        </div>
+        <div id="icon" class="heart-icon">💖</div>
         <h1 id="question">Budeš moje Valentýnka?</h1>
+        
         <div id="actions" class="buttons-wrapper">
             <button id="yesBtn">Ano</button>
             <button id="noBtn">Ne</button>
@@ -91,30 +104,17 @@
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
-        const mainGif = document.getElementById('mainGif');
+        const icon = document.getElementById('icon');
         const actions = document.getElementById('actions');
 
         let yesSize = 18;
         let step = 0;
 
-        // Seznam kroků: text + gif
         const steps = [
-            { 
-                q: "Opravdu? 🥺", 
-                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWpueHhyeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/K6jS2fYn8Ph9T7U9nE/giphy.gif" 
-            },
-            { 
-                q: "Vážně? Jakože fakt? 🤨", 
-                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWpueHhyeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/L95W4wv8nNbz3Jz9O/giphy.gif" 
-            },
-            { 
-                q: "Jsi si úplně, ale úplně jistá? 🧐", 
-                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWpueHhyeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/CPlXvScy0Nq7jD6oD/giphy.gif" 
-            },
-            { 
-                q: "Slibuješ? Pak už není cesty zpět! 💖", 
-                img: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWpueHhyeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/3oz8xAFtqo3O6B6/giphy.gif" 
-            }
+            { q: "Opravdu? 🥺", i: "❓" },
+            { q: "Vážně? 🤨", i: "🤔" },
+            { q: "Jsi si úplně jistá? 🧐", i: "🧐" },
+            { q: "Slibuješ? 💖", i: "✨" }
         ];
 
         function moveNoButton() {
@@ -124,9 +124,9 @@
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Tlačítko Ano se zvětšuje jen v prvním kroku, aby nepřekáželo u gifů později
-            if(step === 0) {
-                yesSize += 15;
+            // Zvětšujeme tlačítko jen při nahánění (krok 0)
+            if (step === 0) {
+                yesSize += 12;
                 yesBtn.style.fontSize = yesSize + "px";
                 yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
             }
@@ -134,33 +134,34 @@
 
         noBtn.addEventListener('mouseover', moveNoButton);
         noBtn.addEventListener('click', () => {
-            alert("To tlačítko je tam jen na ozdobu, miláčku! Click na ANO! 😘");
+            alert("Tudy cesta nevede! 😜");
             moveNoButton();
         });
 
         yesBtn.addEventListener('click', () => {
             if (step < steps.length) {
                 question.innerHTML = steps[step].q;
-                mainGif.src = steps[step].img;
+                icon.innerHTML = steps[step].i;
                 
-                // Resetujeme velikost tlačítka pro další otázky
+                // Resetujeme velikost pro čistý vzhled otázek
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
                 step++;
             } else {
-                // FINÁLE
-                mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWpueHhyeHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/S9X6pY9v3zJ6p/giphy.gif";
+                // FINÁLNÍ OBRAZOVKA
+                icon.innerHTML = "🍔❤️🐶";
                 question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
                 noBtn.style.display = "none";
                 actions.innerHTML = `
                     <a href="https://www.blackdogs.cz/praha" target="_blank" class="restaurant-link">
-                        Jdeme do Black Dogs! 🍔❤️
+                        Jdeme do Black Dogs! 🍽️
                     </a>
                 `;
             }
         });
     </script>
+
 </body>
 </html>
