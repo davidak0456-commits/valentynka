@@ -12,18 +12,19 @@
             height: 100vh;
             margin: 0;
             background-color: #ffe6f2;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
 
         .container {
             text-align: center;
             background: white;
-            padding: 50px;
+            padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 450px;
-            min-height: 300px;
+            width: 90%;
+            max-width: 500px;
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -33,8 +34,9 @@
 
         h1 {
             color: #d63384;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             line-height: 1.4;
+            font-size: 28px;
         }
 
         .buttons-wrapper {
@@ -43,21 +45,23 @@
             align-items: center;
             gap: 20px;
             width: 100%;
+            min-height: 100px;
         }
 
         button {
             padding: 15px 30px;
             font-size: 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.1s ease;
+            transition: all 0.2s ease;
+            font-weight: bold;
         }
 
         #yesBtn {
             background-color: #ff3399;
             color: white;
-            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 51, 153, 0.3);
         }
 
         #noBtn {
@@ -68,7 +72,23 @@
 
         .heart-icon {
             font-size: 60px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+
+        .restaurant-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .restaurant-link:hover {
+            background-color: #000;
         }
     </style>
 </head>
@@ -89,21 +109,22 @@
         const yesBtn = document.getElementById('yesBtn');
         const question = document.getElementById('question');
         const icon = document.getElementById('icon');
+        const actions = document.getElementById('actions');
 
         let yesSize = 18;
         let questionIndex = 0;
 
-        // Seznam otázek, které se budou střídat
+        // Tvoje postupně se měnící otázky
         const questions = [
             "Opravdu? 🥺",
-            "Vážně to chceš? 🙄",
+            "Vážně? 🤨",
             "Jsi si úplně jistá? 🧐",
             "Slibuješ? 💖",
-            "Nerozmyslíš si to ještě? 😇",
-            "Tak jo... miluju tě! ❤️"
+            "Tak jo... stejně jsi neměla na výběr! 😂"
         ];
 
-        // Funkce pro útěk tlačítka "Ne"
+        const icons = ["❓", "🤔", "🧐", "✨", "❤️"];
+
         function moveNoButton() {
             noBtn.style.position = "fixed";
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
@@ -111,39 +132,47 @@
             noBtn.style.left = x + "px";
             noBtn.style.top = y + "px";
 
-            // Zvětšování tlačítka Ano při každém pokusu o Ne
-            yesSize += 10;
+            // Zvětšování tlačítka Ano
+            yesSize += 12;
             yesBtn.style.fontSize = yesSize + "px";
+            yesBtn.style.padding = (yesSize / 1.5) + "px " + (yesSize * 1.2) + "px";
         }
 
-        // Když se jí PŘECE JEN povede kliknout na Ne
+        // Pokud by se jí povedlo kliknout na NE
         noBtn.addEventListener('click', () => {
-            alert("To bolelo... zkus to radši znovu a klikni na to správné tlačítko! 😢");
+            alert("Takhle se k sobě nehodíme! Zkus to tlačítko vedle... 😜");
             moveNoButton();
         });
 
         noBtn.addEventListener('mouseover', moveNoButton);
 
-        // Logika pro tlačítko "Ano"
+        // Hlavní logika tlačítka ANO
         yesBtn.addEventListener('click', () => {
-            if (questionIndex < questions.length - 1) {
-                // Změna textu na další otázku
+            if (questionIndex < questions.length) {
+                // Změníme text a ikonu
                 question.innerHTML = questions[questionIndex];
-                questionIndex++;
+                icon.innerHTML = icons[questionIndex];
                 
-                // Resetujeme velikost tlačítka, aby se tam zase vešlo
+                // Resetujeme velikost tlačítka, aby se dalo na mobilu kliknout
                 yesSize = 20;
                 yesBtn.style.fontSize = "20px";
                 yesBtn.style.padding = "15px 30px";
                 
-                // Změníme i ikonku pro zábavu
-                const icons = ["❓", "🤨", "🤡", "🌸", "✨"];
-                icon.innerHTML = icons[questionIndex] || "❤️";
+                questionIndex++;
             } else {
-                // Finální obrazovka
-                question.innerHTML = "Jupííí! ❤️";
-                icon.innerHTML = "🥰✨🥳";
-                document.getElementById('actions').style.display = "none";
+                // FINÁLNÍ OBRAZOVKA
+                icon.innerHTML = "🍔❤️🐶";
+                question.innerHTML = "Vybral jsem místo bez tebe, takže nemáš na výběr, jdeme sem:";
+                
+                // Vložíme odkaz na restauraci
+                actions.innerHTML = `
+                    <a href="https://www.blackdogs.cz/praha" target="_blank" class="restaurant-link">
+                        Zobrazit Black Dogs 🍽️
+                    </a>
+                `;
+                
+                // Schováme utíkající tlačítko, pokud někde poletuje
+                noBtn.style.display = "none";
             }
         });
     </script>
